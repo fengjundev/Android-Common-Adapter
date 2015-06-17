@@ -1,7 +1,6 @@
 package com.feng.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +21,13 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  */
 public class CommonViewHolder {
 	
-	private int mPosition;
 	private SparseArray<View> mViews;
+	private int mPosition;
 	private View mConvertView;
+	private Context context;
 	
 	public CommonViewHolder(Context context, ViewGroup parent, int itemLayoutId, int position) {
+		this.context = context;
 		mPosition = position;
 		mViews = new SparseArray<View>();
 		mConvertView = LayoutInflater.from(context).inflate(itemLayoutId, parent, false);
@@ -38,6 +39,7 @@ public class CommonViewHolder {
 			return new CommonViewHolder(context, parent, layoutId, position);
 		}else{
 			CommonViewHolder holder = (CommonViewHolder)convertView.getTag();
+			// 每次都对position进行更新
 			holder.mPosition = position;
 			return holder;
 		}
@@ -47,6 +49,12 @@ public class CommonViewHolder {
 		View view = mViews.get(viewId);
 		if(view == null){
 			view = mConvertView.findViewById(viewId);
+			
+			if(view == null){
+				String resName = context.getResources().getResourceEntryName(viewId);
+				throw new RuntimeException("Can not find "+ resName + " in parent view !");
+			}
+			
 			mViews.put(viewId, view);
 		}
 		return (T)view;
@@ -56,6 +64,12 @@ public class CommonViewHolder {
 		View view = mViews.get(viewId);
 		if(view == null){
 			view = mConvertView.findViewById(viewId);
+			
+			if(view == null){
+				String resName = context.getResources().getResourceEntryName(viewId);
+				throw new RuntimeException("Can not find "+ resName + " in parent view !");
+			}
+			
 			view.setOnClickListener(listener);
 			mViews.put(viewId, view);
 		}
@@ -95,22 +109,21 @@ public class CommonViewHolder {
 			return this;
 		}
 		
-		try {
-			ImageLoader.getInstance().displayImage(url, imageview);
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		}
+		// 此处可放置图片异步加载的代码, 如
+		//		try {
+		//			ImageLoader.getInstance().displayImage(url, imageview, option);
+		//		} catch (IllegalStateException e) {}
 		return this;
 	}
 	
-	public CommonViewHolder setVisibility(int viewId, boolean visible){
+	public CommonViewHolder setVisibility(int viewId, int visibility){
 		View view = getView(viewId);
 		
 		if(view == null){
 			return this;
 		}
 		
-		view.setVisibility((visible) ? View.VISIBLE : View.INVISIBLE);
+		view.setVisibility(visibility);
 		
 		return this;
 	}

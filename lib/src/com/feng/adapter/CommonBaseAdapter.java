@@ -20,6 +20,9 @@ public abstract class CommonBaseAdapter<T> extends BaseAdapter {
 	protected List<T> mDatas;
 	protected LayoutInflater mInflater;
 	protected Context context;
+	protected int itemLayoutId;
+	
+	/** 同一个列表中的item可能有多种子布局 */
 	private int[] itemLayoutIds;
 	
 	public CommonBaseAdapter(Context context, List<T> mDatas, int[] itemLayoutIds) {
@@ -32,6 +35,7 @@ public abstract class CommonBaseAdapter<T> extends BaseAdapter {
 		if(mDatas == null){
 			mDatas = new ArrayList<T>();
 		}
+		
 		return mDatas;
 	}
 	
@@ -61,9 +65,9 @@ public abstract class CommonBaseAdapter<T> extends BaseAdapter {
 	}
 	
 	/**
-	 * 默认指定第一种item布局<br>
+	 * 默认指定第一种item布局
 	 * 如果要实现列表中的不同布局,请复写此方法<br>
-	 * 例如根据position对应的bean相关属性指定不同的item布局
+	 * 根据position对应的bean相关属性指定itemLayoutId
 	 * @param position
 	 * @return 对应的itemlayout
 	 */
@@ -73,10 +77,14 @@ public abstract class CommonBaseAdapter<T> extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		
 		CommonViewHolder holder = CommonViewHolder.get(context, convertView, parent, getItemLayout(position), position);
+		
 		convertItemView(holder, getItem(position), position);
+		
 		return holder.getConvertView();
 	}
 	
 	public abstract void convertItemView(CommonViewHolder holder, T item, int position);
+
 }
