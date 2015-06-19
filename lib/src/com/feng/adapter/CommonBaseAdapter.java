@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+
 /**
  * @description  通用listview适配器
  * @author       fengjun
@@ -22,7 +24,7 @@ public abstract class CommonBaseAdapter<T> extends BaseAdapter {
 	protected Context context;
 	protected int itemLayoutId;
 	
-	/** 同一个列表中的item可能有多种子布局 */
+	/** 同一个列表中的item可能有多种布局文件 */
 	private int[] itemLayoutIds;
 	
 	public CommonBaseAdapter(Context context, List<T> mDatas, int[] itemLayoutIds) {

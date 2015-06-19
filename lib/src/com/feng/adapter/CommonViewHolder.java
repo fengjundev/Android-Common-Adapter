@@ -102,17 +102,16 @@ public class CommonViewHolder {
 		return this;
 	}
 	
-	public CommonViewHolder setImageUrl(int viewId, String url, DisplayImageOptions option){
+	public CommonViewHolder setImageUrl(int viewId, String url){
 		ImageView imageview = getView(viewId);
 		
 		if(imageview == null){
 			return this;
 		}
 		
-		// 此处可放置图片异步加载的代码, 如
-		//		try {
-		//			ImageLoader.getInstance().displayImage(url, imageview, option);
-		//		} catch (IllegalStateException e) {}
+		try {
+			ImageLoader.getInstance().displayImage(url, imageview);
+		} catch (IllegalStateException e) {}
 		return this;
 	}
 	
